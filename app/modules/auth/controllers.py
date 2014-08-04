@@ -1,8 +1,7 @@
 __author__ = 'cybran'
 
 # Import flask dependencies
-from flask import Blueprint, request, render_template, \
-                  flash, g, session, redirect, url_for
+from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
 
 # Import password / encryption helper tools
 from werkzeug import check_password_hash, generate_password_hash
@@ -11,10 +10,12 @@ from werkzeug import check_password_hash, generate_password_hash
 from app import db
 
 # Import module forms
-from app.modules.auth.forms import LoginForm
+from app.modules.auth.forms import LoginForm, RegistrationForm
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
+
+from flask import flash
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
@@ -42,3 +43,8 @@ def signin():
         flash('Wrong email or password', 'error-message')
 
     return render_template("auth/signin.html", form=form)
+
+@mod_auth.route('/signup/', methods=['GET', 'POST'])
+def signup():
+    form = RegistrationForm(request.form)
+    return render_template("auth/signup.html", form=form)

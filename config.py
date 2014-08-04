@@ -34,3 +34,9 @@ CSRF_SESSION_KEY = "secret"
 
 # Secret key for signing cookies
 SECRET_KEY = "secret"
+
+
+RECAPTCHA_PUBLIC_KEY='6LeVBPgSAAAAAITqbcuRiHpvHOMCzFsH1Sf-nFtu'
+RECAPTCHA_PRIVATE_KEY='6LeVBPgSAAAAAO4lE7-LV-ZTHZA5sQYSrk8Pnqkc'
+RECAPTCHA_USE_SSL =True
+RECAPTCHA_OPTIONS = {'theme': 'clean'}
