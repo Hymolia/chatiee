@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+    <link rel=stylesheet type=text/css
+          href="{{ url_for('static', filename='chat/sidebar.css') }}">
+{% endblock extra_styles %}
+
+{% block body %}
+
+        {% include "chat/sidebar.html" %}
+
+{% endblock body %}

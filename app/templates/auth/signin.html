@@ -17,7 +17,7 @@
 
     <form method="POST" action="." accept-charset="UTF-8" role="form">
        {{ form.csrf_token }}
-       {{ render_field(form.email, placeholder="Your Email Address",
+       {{ render_field(form.email, placeholder="Your email address",
                                    autofocus="") }}
        {{ render_field(form.password, placeholder="Password") }}
        <div>

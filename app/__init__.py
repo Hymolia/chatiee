@@ -12,6 +12,8 @@ app = Flask(__name__)
 # Configurations
 app.config.from_object('config')
 
+app.config.update(testing = True)
+
 # Define the database object which is imported
 # by modules and controllers
 app.config["MONGODB_DB"] = 'MONGODB_DB'
@@ -24,10 +26,14 @@ def not_found(error):
     return render_template('404.html'), 404
 
 # Import a module / component using its blueprint handler variable (mod_auth)
+from app.modules.intro.controllers import mod_intro as intro_module
 from app.modules.auth.controllers import mod_auth as auth_module
+from app.modules.chat.controllers import mod_chat as chat_module
 
 # Register blueprint(s)
+app.register_blueprint(intro_module)
 app.register_blueprint(auth_module)
+app.register_blueprint(chat_module)
 # app.register_blueprint(xyz_module)
 # ..
 
