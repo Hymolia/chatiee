@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+       <link rel=stylesheet type=text/css
+          href="{{ url_for('static', filename='chat/sidebar.css') }}">
+{% endblock extra_styles %}
+
+{% block extra_js%}
+    <script async="" type="text/javascript" src="{{ url_for('static', filename='backbone/underscore.js') }}"></script>
+    <script async="" type="text/javascript" src="{{ url_for('static', filename='backbone/backbone.js') }} "></script>
+{% endblock extra_js %}

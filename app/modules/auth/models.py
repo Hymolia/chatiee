@@ -7,7 +7,7 @@ from app import db
 import datetime
 
 # Define a User model
-class User(db.Document):
+class User(db.Document, db.EmbeddedDocument):
 
     meta = {
         'indexes' : ['-created_at'],
@@ -18,6 +18,7 @@ class User(db.Document):
     password_hash = db.StringField(required=True)
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
 
+    # __init__ can't be in inherited class from db.Document
     # def __init__(self, email, username, password):
     #     self.email = email
     #     self.username = username

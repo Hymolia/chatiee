@@ -12,6 +12,11 @@ from app.modules.auth.forms import LoginForm, RegistrationForm
 # Import module models (i.e. User)
 from app.modules.auth.models import User
 
+#from app.modules.chat.controllers import index as chat_index
+#from app.modules.chat.controllers import  as chat_index
+
+from app import app
+
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -21,19 +26,17 @@ def signin():
 
     # If sign in form is submitted
     form = LoginForm(request.form)
-
     # Verify the sign in form
     if form.validate_on_submit():
 
         user = User.objects.get(email=form.email.data)
-        print(user.password_hash)
         if user and check_password_hash(user.password_hash, form.password.data):
 
             session['user_id'] = str(user.id)
 
             flash('Welcome %s' % user.username)
 
-            return redirect(url_for('.signup'))
+            return redirect(url_for('chat.index'))
 
         flash('Wrong email or password', 'error-message')
 
