@@ -37,6 +37,8 @@ app.register_blueprint(chat_module)
 # app.register_blueprint(xyz_module)
 # ..
 
+
+
 # Build the database:
 # This will create the database file using SQLAlchemy
 #db.create_all()

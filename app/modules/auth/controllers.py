@@ -15,7 +15,7 @@ from app.modules.auth.models import User
 #from app.modules.chat.controllers import index as chat_index
 #from app.modules.chat.controllers import  as chat_index
 
-from app import app
+
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')

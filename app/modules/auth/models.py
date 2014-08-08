@@ -9,16 +9,16 @@ import datetime
 # Define a User model
 class User(db.Document, db.EmbeddedDocument):
 
-    meta = {
-        'indexes' : ['-created_at'],
-        'ordering' : ['-created_at']
-    }
+    # email is user identificator, username is user-friendly name
     email = db.StringField(required=True, unique=True)
     username = db.StringField(required=True, unique=True)
     password_hash = db.StringField(required=True)
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
 
-    # __init__ can't be in inherited class from db.Document
+    # for check subsribes, contains unread channels name
+    unread_channels = db.ListField(db.StringField())
+
+    # __init__ can't be function in inherited class from db.Document
     # def __init__(self, email, username, password):
     #     self.email = email
     #     self.username = username

@@ -2,12 +2,13 @@ __author__ = 'cybran'
 
 # Import the database object (db) from the main application module
 from app import db
-
+import datetime
 # Import module models (i.e. User) for using in subscribers field
 from app.modules.auth.models import User
 
 class Message(db.EmbeddedDocument):
     author = db.StringField(required=True)
+    date_created = db.DateTimeField(default=datetime.datetime.now)
     content = db.StringField(required=True)
 
     def __str__(self):
