@@ -1,5 +1,22 @@
 (function($){
 
+// set up a username
+document.getElementById('username').innerHTML = Cookie.get('username');
+
+
+// $(document).ready(function(){
+//     $('#post-message').keypress(function(e){
+//       if(e.keyCode==13)
+//       $('#post-message').click();
+//     });
+// });
+
+$("#message-input").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#message-post").click();
+    } 
+});
+
 var Message = Backbone.Model.extend({
   defaults: {
   	author: '',
@@ -33,7 +50,7 @@ var ListView = Backbone.View.extend({
 el: $('#conversation'),
 
 events: {
-  'click button#post': 'postMessage'
+  'click button#message-post': 'postMessage'
 },
 initialize: function(){
 	_.bindAll(this, 'render', 'postMessage');
@@ -46,7 +63,7 @@ initialize: function(){
 
 render: function(){
   var self = this;
-  $('#input-button-wrapper', this.el).append("<button class=\"btn btn-default\" id=\"post\">Post it</button>")
+  // $('#input-button-wrapper', this.el).append("<button class=\"btn btn-default\" id=\"post\">Post it</button>")
   _(this.collection.models).each(function(message){
     self.appendMessage(message)
   }, this);
@@ -62,6 +79,8 @@ postMessage: function(){
     content: $('#message-input', this.el).val()
   });
   this.collection.add(message)
+
+  $("#message-input").val('');
 },
 appendMessage: function(message){
   var messageView = new MessageView({

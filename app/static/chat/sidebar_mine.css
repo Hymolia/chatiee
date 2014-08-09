@@ -5,6 +5,9 @@
         margin-left: -250px;
         position:fixed;
         }
+.sidebar a {
+        text-decoration: none;
+        }
 div.wrapper {
         padding-left: 250px;
         }
