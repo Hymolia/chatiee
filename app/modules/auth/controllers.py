@@ -1,7 +1,7 @@
 __author__ = 'cybran'
 
 # Import flask dependencies
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request, render_template, flash, redirect, url_for, make_response
 # Import security functions
 from werkzeug.security import generate_password_hash, check_password_hash
 # Import module forms
@@ -34,11 +34,13 @@ def signin():
         registered_user = User.objects.get(email=form.email.data)
         if registered_user and check_password_hash(registered_user.password_hash, form.password.data):
             login_user(registered_user)
-            flash('Welcome, %s' % registered_user.username)
-            return redirect(request.args.get("next") or url_for("chat.index"))
+            redirect_to_chat = redirect(request.args.get("next") or url_for("chat.index"))
+            response = make_response(redirect_to_chat)
+            response.set_cookie('username', value=registered_user.username)
+            return response
 
-        flash('Wrong email or password', 'error-message')
-        return redirect(url_for('chat.signin'))
+    flash('Wrong email or password', 'error-message')
+    return redirect(url_for('chat.signin'))
 
 
 @mod_auth.route('/signup/', methods=['GET', 'POST'])

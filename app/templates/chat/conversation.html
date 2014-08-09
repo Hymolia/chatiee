@@ -21,8 +21,10 @@
 
     <!--<form method="POST" class="form-inline" id="form-message" action="postmessage" accept-charset="UTF-8" role="form">-->
        <!--{{ form.csrf_token }}-->
-        <div id="form-message">
-        <input id="message-input" class="form-control" type="text" placeholder="Your text" name="text" autofocus="">
+        <div class="input-group">
+            <input id="message-input" class="form-control" type="text" placeholder="Your text" name="text" autofocus="">
+                  <span class="input-group-btn" id="input-button-wrapper">
+                  </span>
         </div>
     <!--</form>-->
 {% endblock messages %}

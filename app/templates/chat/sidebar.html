@@ -6,19 +6,20 @@
 {% endmacro %}
 
         <div class="col-md-2 sidebar">
-           <ul class="nav nav-pills nav-stacked">  <!--sidebar-nav-->
-                <li>
-                    <a href=" {{ url_for('chat.index') }} ">
-                        Home
-                    </a>
-                </li>                <li>
-                    <a href="..{{ url_for('auth.logout') }}">
-                        Log out
-                    </a>
-                </li>
-                <li>
-                    <p> Channels </p>
-                </li>
+                <div class="text-header">
+                   You are  <a href=" {{ url_for('chat.index') }} ">
+                                <strong id="username"> blablabla </strong> </a>
+
+                      <a href=" {{ url_for('auth.logout') }} ">
+                            <button>
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </button>
+                      </a>
+                </div>
+                    <p class="text-header"> Channels </p>
+
+
+                <ul class="nav nav-pills nav-stacked">
 
                 <li>
                     {% for channel in channels %}

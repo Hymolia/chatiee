@@ -46,7 +46,7 @@ initialize: function(){
 
 render: function(){
   var self = this;
-  $('#form-message', this.el).append("<button id=\"post\" \">Post it</button>")
+  $('#input-button-wrapper', this.el).append("<button class=\"btn btn-default\" id=\"post\">Post it</button>")
   _(this.collection.models).each(function(message){
     self.appendMessage(message)
   }, this);
@@ -58,7 +58,7 @@ postMessage: function(){
 
   var message = new Message();
   message.set({
-    author: 'contentBackbone',
+    author: Cookie.get('username'),
     content: $('#message-input', this.el).val()
   });
   this.collection.add(message)

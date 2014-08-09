@@ -1,7 +1,29 @@
 .sidebar {
         background-color: #444;
+        height: 100%;
+        left: 250px;
+        margin-left: -250px;
+        position:fixed;
+        }
+div.wrapper {
+        padding-left: 250px;
         }
 
-.message-input {
-        width: 500px;
+div.input-group {
+        margin-bottom: 20px;
+        margin-right: 20px;
+        position: fixed;
+        bottom: 0;
+        }
+
+div#messages {
+        margin-top: 20px;
+        }
+
+.sidebar .text-header  {
+        color: #fff;
+        }
+
+.sidebar .text-header button {
+        color: #444;
         }

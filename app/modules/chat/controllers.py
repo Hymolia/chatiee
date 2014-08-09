@@ -9,6 +9,8 @@ from app.modules.chat.forms import New_channel, New_message
 from flask.views import MethodView
 from flask.ext.login import login_required
 
+from flask import g
+
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_chat = Blueprint('chat', __name__, url_prefix='/chat')
 
@@ -85,6 +87,7 @@ def get_message(channel):
 class MessageAPI(MethodView):
     def post(self, channel):
         message = Message(**request.get_json())
+        message.author = g.user.username
         current_channel = Channel.objects.get(name=channel)
         current_channel.messages.append(message)
         current_channel.save()
