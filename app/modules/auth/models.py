@@ -8,8 +8,6 @@ import datetime
 
 # Define a User model
 class User(db.Document, db.EmbeddedDocument):
-
-    # internal identificator
     user_id = db.IntField(required=True, unique=True)
     # user-friendly identificator
     email = db.StringField(required=True, unique=True)
@@ -32,11 +30,15 @@ class User(db.Document, db.EmbeddedDocument):
 
     def is_authenticated(self):
         return True
+
     def is_active(self):
         return True
+
     def is_anonymous(self):
         return False
+
     def get_id(self):
         return self.user_id
+
     def __repr__(self):
         return self.__str__()

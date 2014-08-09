@@ -1,24 +1,23 @@
 __author__ = 'cybran'
 
 # Import flask dependencies
-from flask import Blueprint, request, render_template, flash, session, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for
 from app.modules.chat.models import Message, Channel
 
 from app.modules.chat.forms import New_channel, New_message
 
 from flask.views import MethodView
-
-import app
+from flask.ext.login import login_required
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_chat = Blueprint('chat', __name__, url_prefix='/chat')
 
 # Home page
 @mod_chat.route('/')
+@login_required
 def index():
     form = New_channel(request.form)
     channels = Channel.objects()
-    print(session['user_id'])
     return render_template('chat/channel.html', form=form, channels=channels)
 
 
@@ -33,7 +32,9 @@ def index():
 
 
 # Creating channels
+
 @mod_chat.route('/channels/create', methods=['GET', 'POST'])
+@login_required
 def create_channel():
     form = New_channel(request.form)
     if form.validate_on_submit():
@@ -44,6 +45,7 @@ def create_channel():
 
 
 # return rendered template with last 50 messages
+@login_required
 @mod_chat.route('/channels/<channel>')
 def get_message(channel):
     # fixme monkey code, it needs for drawing createchannel form
