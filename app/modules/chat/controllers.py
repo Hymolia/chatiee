@@ -6,7 +6,7 @@ from app.modules.chat.models import Message, Channel
 
 from app.modules.chat.forms import New_channel, New_message
 
-from flask.views import View
+from flask.views import MethodView
 
 import app
 
@@ -18,6 +18,7 @@ mod_chat = Blueprint('chat', __name__, url_prefix='/chat')
 def index():
     form = New_channel(request.form)
     channels = Channel.objects()
+    print(session['user_id'])
     return render_template('chat/channel.html', form=form, channels=channels)
 
 
@@ -51,13 +52,7 @@ def get_message(channel):
     # fixme monkey code, for post_message test
     message_form = New_message(request.form)
 
-    current_channel = Channel.objects.get(name=channel)
-
-    for message in current_channel.messages:
-        print(message)
-
-    messages = current_channel.messages[:50]
-    print(messages)
+    messages = Channel.objects.get(name=channel).messages[-5:]
     return render_template('chat/conversation.html', messages=messages, form=channel_form,
                            template_message_form=message_form)
 
@@ -73,14 +68,24 @@ def get_message(channel):
 #
 #mod_chat.add_url_rule('/channels/<channel>', view_func=Get_message.as_view('Get_message'))
 
-@mod_chat.route('/channels/<channel>/postmessage', methods=['GET', 'POST'])
-def post_message(channel):
-    form = New_message(request.form)
-    message = Message()
-    print(form.text.data)
-    message.text = form.text.data
-    print(request.args.get('channel'))
-    current_channel = Channel.objects.get(name=request.args.get('channel'))
-    current_channel.messages.append(message)
-    current_channel.save()
-    return redirect('chat.index')
+# @mod_chat.route('/channels/<channel>/postmessage', methods=['POST'])
+# def post_message(channel):
+#     form = New_message(request.form)
+#     message = Message()
+#     print(form.text.data)
+#     message.text = form.text.data
+#     print(request.args.get('channel'))
+#     current_channel = Channel.objects.get(name=request.args.get('channel'))
+#     current_channel.messages.append(message)
+#     current_channel.save()
+    # return redirect('chat.index')
+
+class MessageAPI(MethodView):
+    def post(self, channel):
+        message = Message(**request.get_json())
+        current_channel = Channel.objects.get(name=channel)
+        current_channel.messages.append(message)
+        current_channel.save()
+        return redirect(url_for('chat.index'))
+
+mod_chat.add_url_rule('/channels/<channel>/postmessage', view_func=MessageAPI.as_view('message'))

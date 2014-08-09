@@ -9,8 +9,11 @@ import datetime
 # Define a User model
 class User(db.Document, db.EmbeddedDocument):
 
-    # email is user identificator, username is user-friendly name
+    # internal identificator
+    user_id = db.IntField(required=True, unique=True)
+    # user-friendly identificator
     email = db.StringField(required=True, unique=True)
+    #  user-friendly name
     username = db.StringField(required=True, unique=True)
     password_hash = db.StringField(required=True)
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
@@ -26,3 +29,14 @@ class User(db.Document, db.EmbeddedDocument):
 
     def __str__(self):
         return self.username
+
+    def is_authenticated(self):
+        return True
+    def is_active(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.user_id
+    def __repr__(self):
+        return self.__str__()

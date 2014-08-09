@@ -12,6 +12,12 @@ from app.modules.auth.forms import LoginForm, RegistrationForm
 # Import module models (i.e. User)
 from app.modules.auth.models import User
 
+from app import login_manager
+
+@login_manager.user_loader
+def load_user(id):
+    return User.objects.get(user_id=id)
+
 #from app.modules.chat.controllers import index as chat_index
 #from app.modules.chat.controllers import  as chat_index
 

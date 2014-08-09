@@ -7,6 +7,12 @@ import datetime
 from app.modules.auth.models import User
 
 class Message(db.EmbeddedDocument):
+
+    meta = {
+        'indexes' : ['-created_at'],
+        'ordering' : ['-created_at']
+    }
+
     author = db.StringField(required=True)
     date_created = db.DateTimeField(default=datetime.datetime.now)
     content = db.StringField(required=True)

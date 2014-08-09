@@ -8,6 +8,7 @@
 {% endblock extra_styles %}
 
 {% block extra_js%}
-    <script async="" type="text/javascript" src="{{ url_for('static', filename='backbone/underscore.js') }}"></script>
-    <script async="" type="text/javascript" src="{{ url_for('static', filename='backbone/backbone.js') }} "></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='backbone/underscore.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='backbone/backbone.js') }} "></script>
+    <script async="" type="text/javascript" src="{{ url_for('static', filename='chat/manage.js') }} "></script>
 {% endblock extra_js %}

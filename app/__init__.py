@@ -3,11 +3,18 @@ __author__ = 'cybran'
 # Import flask and template operators
 from flask import Flask, render_template
 
-# Import SQLAlchemy
+# Import MongoEngine and flask-login
 from flask.ext.mongoengine import MongoEngine
+from flask.ext.login import LoginManager
+
 
 # Define the WSGI application object
 app = Flask(__name__)
+
+# Define flask-login as auth manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 # Configurations
 app.config.from_object('config')
