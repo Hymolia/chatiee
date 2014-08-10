@@ -4,9 +4,9 @@ __author__ = 'cybran'
 from flask import Blueprint, request, render_template, redirect, url_for, Response, g
 import json
 from app.modules.chat.models import Message, Channel
-from app.modules.chat.forms import New_channel, New_message
+from app.modules.chat.forms import New_channel
 from app.modules.auth.models import User
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask.views import MethodView
 from flask.ext.login import login_required, current_user
@@ -21,77 +21,6 @@ def main():
     form = New_channel(request.form)
     channels = Channel.objects()
     return render_template('chat/chat.html', form=form, channels=channels)
-#
-#
-# # class Index(View):
-# # def dispatch_request(self):
-# # form = New_channel(request.form)
-# #         channels = Channel.objects()
-# #         return render_template('chat/channel.html', form=form, channels=channels)
-# #
-# #
-# # mod_chat.add_url_rule('/', view_func=Index.as_view('index'))
-#
-#
-# # Creating channels
-#
-# @mod_chat.route('/channels/create', methods=['GET', 'POST'])
-# @login_required
-# def create_channel():
-#     form = New_channel(request.form)
-#     if form.validate_on_submit():
-#         channel = Channel()
-#         channel.name = form.name.data
-#         channel.save()
-#         return redirect(url_for('.index'))
-#
-#
-# # return rendered template with last 50 messages
-# @login_required
-# @mod_chat.route('/channels/<channel>')
-# def get_message(channel):
-#     # fixme monkey code, it needs for drawing createchannel form
-#     channel_form = New_channel(request.form)
-#
-#     # fixme monkey code, for post_message test
-#     message_form = New_message(request.form)
-#
-#     messages = Channel.objects.get(name=channel).messages[-5:]
-#     return render_template('chat/conversation.html', messages=messages, form=channel_form,
-#                            template_message_form=message_form)
-#
-#     # FIXME need to realize views as classes, not functions
-
-
-# class UserAPI(MethodView):
-#
-#     def get(self, user_id):
-#         if user_id is None:
-#             # return a list of users
-#             pass
-#         else:
-#             # expose a single user
-#             pass
-#
-#     def post(self):
-#         # create a new user
-#         pass
-#
-#     def delete(self, user_id):
-#         # delete a single user
-#         pass
-#
-#     def put(self, user_id):
-#         # update a single user
-#         pass
-#
-# user_view = UserAPI.as_view('user_api')
-# app.add_url_rule('/users/', defaults={'user_id': None},
-#                  view_func=user_view, methods=['GET',])
-# app.add_url_rule('/users/', view_func=user_view, methods=['POST',])
-# app.add_url_rule('/users/<int:user_id>', view_func=user_view,
-#                  methods=['GET', 'PUT', 'DELETE'])
-
 
 # RESTful API for managing channels
 
@@ -103,10 +32,11 @@ class ChatAPI(MethodView):
 
 
 class ChannelAPI(ChatAPI):
-    def get(self, channel_name):
+    def get(self, channel_name, unread="false"):
         # /channels
         if channel_name is None:
             # if we haven't received search name string, return names of all channels
+            print(request.data)
             if request.get_json() is None:
                 channels = Channel.objects()
                 names_of_channels = list()
@@ -127,7 +57,7 @@ class ChannelAPI(ChatAPI):
 
         # /channels/<channel_name>
         # if we haven't received 'last-received-datetime', return all messages
-        if request.args.get('unread') is None:
+        if unread is "false":
             messages = list()
             processed_channel = Channel.objects.get(name=channel_name)
             for single_message in processed_channel.messages:
@@ -138,19 +68,22 @@ class ChannelAPI(ChatAPI):
                 }
                 messages.append(message_info)
             return self.response_json(messages)
-        # else we'll return only message after that datetime
+        # else we'll return only messages count after that datetime
         else:
             user = User.objects.get(email=current_user.email)
             subscribe_datetime = user.unread_channels[channel_name]
+            print(subscribe_datetime)
 
-            unread_messages = Channel.objects.get(name=channel_name) \
-                .messages(date_created__lt=subscribe_datetime)
+            messages = Channel.objects.get(name=channel_name)\
+                .messages
+            unread_count = 0
+            for message in messages:
+                print(message.date_created)
+                print(subscribe_datetime)
+                if message.date_created > subscribe_datetime:
+                    unread_count += 1
 
-            messages = list()
-            for message in unread_messages:
-                messages.extend(message)
-
-            return self.response_json(messages)
+            return Response(response=str(unread_count))
 
     def post(self, channel_name):
         # /channels
@@ -166,6 +99,7 @@ class ChannelAPI(ChatAPI):
         else:
             # fixme avoided backbone.js bug with passing unexpected field (channel), but it's a duct tape
             json_model = request.get_json()
+            print(request.get_json())
             message = Message()
             message.content = json_model['content']
             message.author = g.user.username
@@ -182,10 +116,15 @@ mod_chat.add_url_rule('/channels',
                       defaults={'channel_name': None},
                       view_func=channel_view,
                       methods=['GET','POST'])
+# search channels
 
 mod_chat.add_url_rule('/channels/<channel_name>',
                       view_func=channel_view,
                       methods=['GET', 'POST'])
+
+mod_chat.add_url_rule('/channels/<channel_name>/unread=<unread>',
+                      view_func=channel_view,
+                      methods=['GET'])
 
 
 class SubscribeAPI(ChatAPI):
@@ -224,7 +163,3 @@ mod_chat.add_url_rule('/user',
 mod_chat.add_url_rule('/user/<channel_name>',
                       view_func=subscribe_view,
                       methods=['POST', 'DELETE'])
-
-
-
-

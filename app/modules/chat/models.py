@@ -23,7 +23,6 @@ class Message(db.EmbeddedDocument):
 class Channel(db.Document):
 
     name = db.StringField(required=True, unique=True)
-    subscribers = db.ListField(db.EmbeddedDocumentField(User))
     messages = db.ListField(db.EmbeddedDocumentField(Message))
 
     def __str__(self):

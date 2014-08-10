@@ -19,10 +19,6 @@ def load_user(id):
     return User.objects.get(user_id=id)
 
 
-# @login_manager.unauthorized_handler
-# def unauthorized_callback():
-# return redirect('/signin/?next=' + request.path)
-
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 

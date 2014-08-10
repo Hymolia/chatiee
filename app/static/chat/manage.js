@@ -10,10 +10,6 @@ $("#message-input").keyup(function(event){
     } 
 });
 
-
-
-
-
 // Create message model. Use only save()
 var Message = Backbone.Model.extend({
   defaults: {
@@ -29,6 +25,7 @@ var Message = Backbone.Model.extend({
 // Use only fetch()
 var MessageList = Backbone.Collection.extend({
   model: Message,
+
   initialize: function(channel){
       this.url = 'channels/'+channel
   }
@@ -59,10 +56,8 @@ var MessageListView = Backbone.View.extend({
       _.bindAll(this, 'render', 'postMessage', 'appendMessage');
       this.channel = channel
       this.collection = new MessageList(channel.channel_name);
-      console.log(this.collection)
       this.collection.bind('add', this.appendMessage);
       this.collection.fetch()
-      console.log(this.collection)
       this.render();
     },
 
@@ -127,7 +122,7 @@ var ChannelView = Backbone.View.extend({
       "<a class=\"channel-selector "+this.model.get('name')
       +"\" href=\"#channels/"+
       this.model.get('name')+"\">#" +this.model.get('name')
-      + "</a> <button class=\" glyphicon glyphicon-eye-open subscribe-"+ this.model.get('name') +"\"></button>");
+      + "</a> <button class=\" glyphicon glyphicon-eye-close subscribe-"+ this.model.get('name') +"\"></button>");
 
     return this;
  	}
@@ -213,18 +208,24 @@ appendChannel: function(channel){
 
   $('ul#channel-list', this.el).append(channelView.render().el)
 
-  $.get( "user", function(data) {
-   if (!data[channel.attributes.name]) {
-     $("li button.subscribe-"+channel.attributes.name)
-                .toggleClass('glyphicon-eye-open glyphicon-eye-close');
+  $.get("user", function(data) {
+   if (data[channel.attributes.name]) {
+        $("li button.subscribe-"+channel.attributes.name)
+                    .toggleClass('glyphicon-eye-close glyphicon-eye-open');
+
+            $.get(
+              "channels/"+channel.attributes.name+"/unread=true",
+            function( data ) {
+              $("li button.subscribe-"+channel.attributes.name).append(" "+data);
+              }
+            )
+        
    }
 
   })
 },
 
 });
-
-var messageLists = []
 
 var ChannelListView = new ChannelListView();
 
