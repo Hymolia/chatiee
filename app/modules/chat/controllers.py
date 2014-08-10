@@ -115,13 +115,14 @@ class ChannelAPI(ChatAPI):
                 return self.response_json(list=names_of_channels)
 
             # else return only channels with similar names to 'search-name'
-            similar_channels = Channel.objects(name__contains=request.args.get('search-name'))
+            else:
+                similar_channels = Channel.objects(name__contains=request.args.get('search-name'))
 
-            names_of_channels = list()
-            for channel in similar_channels:
-                names_of_channels.extend(channel.name)
+                names_of_channels = list()
+                for channel in similar_channels:
+                    names_of_channels.extend(channel.name)
 
-            return self.response_json(list=names_of_channels)
+                return self.response_json(list=names_of_channels)
 
         # /channels/<channel_name>
         # if we haven't received 'last-received-datetime', return all messages
@@ -134,7 +135,6 @@ class ChannelAPI(ChatAPI):
                     "content": single_message.content,
                     "date_created": single_message.date_created.strftime("%b %d %Y %H:%M:%S")
                 }
-                print(message_info)
                 messages.append(message_info)
             return self.response_json(messages)
         # else we'll return only message after that datetime
@@ -163,12 +163,28 @@ class ChannelAPI(ChatAPI):
 
         # /channels/<channel_name>
         else:
-            message = Message(**request.get_json())
-            # message.author = g.user.username
+            # fixme avoided backbone.js bug with passing unexpected field (channel), but it's a duct tape
+            json_model = request.get_json()
+            message = Message()
+            message.content = json_model['content']
+            message.author = g.user.username
             current_channel = Channel.objects.get(name=channel_name)
             current_channel.messages.append(message)
             current_channel.save()
             return Response(status=201)
+
+
+# set url rules for ChannelAPI
+channel_view = ChannelAPI.as_view('channel_api')
+
+mod_chat.add_url_rule('/channels',
+                      defaults={'channel_name': None},
+                      view_func=channel_view,
+                      methods=['GET','POST'])
+
+mod_chat.add_url_rule('/channels/<channel_name>',
+                      view_func=channel_view,
+                      methods=['GET', 'POST'])
 
 
 class SubscribeAPI(ChatAPI):
@@ -196,20 +212,9 @@ class SubscribeAPI(ChatAPI):
         user.save()
         return Response(status=200)
 
-# set url rules for ChannelAPI
-channel_view = ChannelAPI.as_view('channel_api')
-
-mod_chat.add_url_rule('/channels',
-                      defaults={'channel_name': None},
-                      view_func=channel_view,
-                      methods=['GET','POST'])
-
-mod_chat.add_url_rule('/channels/<channel_name>',
-                      view_func=channel_view,
-                      methods=['GET', 'POST'])
 
 
-# set utl rules for SubscribeAPI
+# set url rules for SubscribeAPI
 subscribe_view = SubscribeAPI.as_view('subscribe_api')
 mod_chat.add_url_rule('/user',
                       view_func=subscribe_view,

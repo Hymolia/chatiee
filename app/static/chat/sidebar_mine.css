@@ -12,7 +12,9 @@ div.wrapper {
         padding-left: 250px;
         }
 
-div.input-group {
+#message-form {
+        display: hidden;
+        margin-top: 20px;
         margin-bottom: 20px;
         margin-right: 20px;
         position: fixed;
@@ -20,7 +22,9 @@ div.input-group {
         }
 
 div#messages {
-        margin-top: 20px;
+        /*margin-top: 100px;*/
+        padding-bottom: 50px;
+        display: block;
         }
 
 #sidebar .text-header  {
@@ -34,3 +38,7 @@ div#messages {
 #channel-creation {
         margin-top: 10px;
         }
+
+ul li {
+        dislay: inline;
+}
