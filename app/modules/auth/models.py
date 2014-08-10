@@ -4,20 +4,20 @@ __author__ = 'cybran'
 # We will define this inside /app/__init__.py in the next sections.
 from app import db
 
-import datetime
+from datetime import datetime
 
 # Define a User model
-class User(db.Document, db.EmbeddedDocument):
+class User(db.DynamicDocument, db.EmbeddedDocument):
     user_id = db.IntField(required=True, unique=True)
     # user-friendly identificator
     email = db.StringField(required=True, unique=True)
     #  user-friendly name
     username = db.StringField(required=True, unique=True)
     password_hash = db.StringField(required=True)
-    created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    registered_at = db.DateTimeField(default=datetime.now, required=True)
 
     # for check subsribes, contains unread channels name
-    unread_channels = db.ListField(db.StringField())
+    unread_channels = db.DictField()
 
     # __init__ can't be function in inherited class from db.Document
     # def __init__(self, email, username, password):

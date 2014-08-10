@@ -1,13 +1,11 @@
 __author__ = 'cybran'
 
 # Import flask and template operators
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, redirect, request
 
 # Import MongoEngine and flask-login
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.login import LoginManager, current_user
-
-
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -20,6 +18,8 @@ login_manager.login_view = 'auth.signin'
 @app.before_request
 def before_request():
     g.user = current_user
+
+
 
 # Configurations
 app.config.from_object('config')

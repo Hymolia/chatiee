@@ -1,4 +1,4 @@
-.sidebar {
+#sidebar {
         background-color: #444;
         height: 100%;
         left: 250px;
@@ -23,10 +23,14 @@ div#messages {
         margin-top: 20px;
         }
 
-.sidebar .text-header  {
+#sidebar .text-header  {
         color: #fff;
         }
 
-.sidebar .text-header button {
+#sidebar .text-header button {
         color: #444;
+        }
+
+#channel-creation {
+        margin-top: 10px;
         }

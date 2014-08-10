@@ -18,15 +18,25 @@ from flask.ext.login import login_user, logout_user, current_user
 def load_user(id):
     return User.objects.get(user_id=id)
 
+
+# @login_manager.unauthorized_handler
+# def unauthorized_callback():
+# return redirect('/signin/?next=' + request.path)
+
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
+
+# Define unauthorized handler with user-friendly request.path
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect(url_for('auth.signin') + '?next=' + request.path)
 
 
 # Set the route and accepted methods
 @mod_auth.route('/signin/', methods=['GET', 'POST'])
 def signin():
     form = LoginForm(request.form)
-    if  request.method == 'GET':
+    if request.method == 'GET':
         return render_template("auth/signin.html", form=form)
     # If sign in form is submitted
     # Verify the sign in form
@@ -34,7 +44,7 @@ def signin():
         registered_user = User.objects.get(email=form.email.data)
         if registered_user and check_password_hash(registered_user.password_hash, form.password.data):
             login_user(registered_user)
-            redirect_to_chat = redirect(request.args.get("next") or url_for("chat.index"))
+            redirect_to_chat = redirect(request.args.get("next") or url_for("chat.main"))
             response = make_response(redirect_to_chat)
             response.set_cookie('username', value=registered_user.username)
             return response
@@ -45,7 +55,6 @@ def signin():
 
 @mod_auth.route('/signup/', methods=['GET', 'POST'])
 def signup():
-
     form = RegistrationForm(request.form)
     if request.method == 'GET':
         return render_template("auth/signup.html", form=form)
@@ -66,7 +75,11 @@ def signup():
 
     return render_template("auth/signup.html", form=form)
 
+
 @mod_auth.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('intro.index'))
+    response = make_response(redirect(url_for("intro.index")))
+    response.set_cookie('username', expires=0)
+    return response
+
