@@ -107,7 +107,7 @@ class ChannelAPI(ChatAPI):
         # /channels
         if channel_name is None:
             # if we haven't received search name string, return names of all channels
-            if request.args.get('search-name') is None:
+            if request.get_json() is None:
                 channels = Channel.objects()
                 names_of_channels = list()
                 for channel in channels:
@@ -116,7 +116,8 @@ class ChannelAPI(ChatAPI):
 
             # else return only channels with similar names to 'search-name'
             else:
-                similar_channels = Channel.objects(name__contains=request.args.get('search-name'))
+                print("We've in!")
+                similar_channels = Channel.objects(name__contains=request.get_json()['search-name'])
 
                 names_of_channels = list()
                 for channel in similar_channels:

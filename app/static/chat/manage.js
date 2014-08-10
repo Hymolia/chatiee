@@ -29,6 +29,9 @@ var Message = Backbone.Model.extend({
 // Use only fetch()
 var MessageList = Backbone.Collection.extend({
   model: Message,
+  initialize: function(channel){
+      this.url = 'channels/'+channel
+  }
 })
 
 var MessageView = Backbone.View.extend({
@@ -56,8 +59,10 @@ var MessageListView = Backbone.View.extend({
       _.bindAll(this, 'render', 'postMessage', 'appendMessage');
       this.channel = channel
       this.collection = new MessageList(channel.channel_name);
+      console.log(this.collection)
       this.collection.bind('add', this.appendMessage);
       this.collection.fetch()
+      console.log(this.collection)
       this.render();
     },
 
