@@ -46,7 +46,7 @@ def signin():
             return response
 
     flash('Wrong email or password', 'error-message')
-    return redirect(url_for('chat.signin'))
+    return redirect(url_for('auth.signin'))
 
 
 @mod_auth.route('/signup/', methods=['GET', 'POST'])
