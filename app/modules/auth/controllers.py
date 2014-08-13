@@ -45,7 +45,7 @@ def signin():
             response.set_cookie('username', value=registered_user.username)
             return response
 
-    flash('Wrong email or password', 'error-message')
+    flash('Wrong email or password.', 'error-message')
     return redirect(url_for('auth.signin'))
 
 
