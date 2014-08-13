@@ -21,10 +21,10 @@
                                    autofocus="") }}
        {{ render_field(form.password, placeholder="Password") }}
        <div>
-          <label>
-            <input type="checkbox" name="remember" value="1"> Remember Me
-          </label>
-          <a role="button" href="">Forgot your password?</a><span class="clearfix"></span>
+           <label>
+           {{ form.remember_me }} Remember Me
+            </label>
+          <a role="button" href="">Forgot your password? (don't work, future feature)</a><span class="clearfix"></span>
        </div>
           <button class="btn btn-primary btn-lg"  type="submit" name="submit">Sign in</button>
     </form>

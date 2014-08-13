@@ -39,7 +39,8 @@ def signin():
     if form.validate_on_submit():
         registered_user = User.objects.get(email=form.email.data)
         if registered_user and check_password_hash(registered_user.password_hash, form.password.data):
-            login_user(registered_user)
+            remember_me = form.remember_me.data
+            login_user(registered_user, remember = remember_me)
             redirect_to_chat = redirect(request.args.get("next") or url_for("chat.main"))
             response = make_response(redirect_to_chat)
             response.set_cookie('username', value=registered_user.username)
