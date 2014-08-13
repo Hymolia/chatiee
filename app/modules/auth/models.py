@@ -16,7 +16,7 @@ class User(db.DynamicDocument, db.EmbeddedDocument):
     password_hash = db.StringField(required=True)
     registered_at = db.DateTimeField(default=datetime.now, required=True)
 
-    # for check subsribes, contains unread channels name
+    # store of subscribed channels and last viewed time
     unread_channels = db.DictField()
 
     # __init__ can't be function in inherited class from db.Document

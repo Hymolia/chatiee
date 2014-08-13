@@ -36,7 +36,6 @@ class ChannelAPI(ChatAPI):
         # /channels
         if channel_name is None:
             # if we haven't received search name string, return names of all channels
-            print(request.data)
             if request.get_json() is None:
                 channels = Channel.objects()
                 names_of_channels = list()
@@ -46,7 +45,6 @@ class ChannelAPI(ChatAPI):
 
             # else return only channels with similar names to 'search-name'
             else:
-                print("We've in!")
                 similar_channels = Channel.objects(name__contains=request.get_json()['search-name'])
 
                 names_of_channels = list()
@@ -56,8 +54,15 @@ class ChannelAPI(ChatAPI):
                 return self.response_json(list=names_of_channels)
 
         # /channels/<channel_name>
-        # if we haven't received 'last-received-datetime', return all messages
+        # if we haven't received "unread" tag, return all messages
         if unread is "false":
+
+            # checking for user subscribes, if user subscribed for channel_name, update date
+            user = User.objects.get(email=current_user.email)
+            if channel_name in user.unread_channels:
+                user.unread_channels[channel_name] = datetime.now()
+                user.save()
+
             messages = list()
             processed_channel = Channel.objects.get(name=channel_name)
             for single_message in processed_channel.messages:
@@ -68,18 +73,16 @@ class ChannelAPI(ChatAPI):
                 }
                 messages.append(message_info)
             return self.response_json(messages)
+
         # else we'll return only messages count after that datetime
         else:
             user = User.objects.get(email=current_user.email)
             subscribe_datetime = user.unread_channels[channel_name]
-            print(subscribe_datetime)
 
             messages = Channel.objects.get(name=channel_name)\
                 .messages
             unread_count = 0
             for message in messages:
-                print(message.date_created)
-                print(subscribe_datetime)
                 if message.date_created > subscribe_datetime:
                     unread_count += 1
 
@@ -89,7 +92,6 @@ class ChannelAPI(ChatAPI):
         # /channels
         if channel_name is None:
             # insert new channel
-            print(request.get_json())
             new_channel = Channel()
             new_channel.name = request.get_json()['name']
             new_channel.save()
@@ -99,7 +101,6 @@ class ChannelAPI(ChatAPI):
         else:
             # fixme avoided backbone.js bug with passing unexpected field (channel), but it's a duct tape
             json_model = request.get_json()
-            print(request.get_json())
             message = Message()
             message.content = json_model['content']
             message.author = g.user.username
