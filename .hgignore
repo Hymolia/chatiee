@@ -1,5 +1,9 @@
-^venv$
-^.idea$
-^.git
-$sublime$
+# use glob syntax.
+syntax: glob
+
+venv/**
+.idea/**
+.git/**
+
+*sublime*
 config.py
