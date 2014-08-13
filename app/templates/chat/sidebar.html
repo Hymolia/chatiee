@@ -1,0 +1,35 @@
+ {% macro render_field(field, placeholder=None) %}
+        {% set css_class = 'form-control' + kwargs.pop('class', '') %}
+        <div class="form-group">
+        {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+        </div>
+{% endmacro %}
+
+        <div class="col-md-2" id="sidebar">
+                <div class="text-header">
+                   You are  <a href=" {{ url_for('chat.main') }} ">
+                                <strong id="username">  </strong> </a>
+
+                      <a href=" {{ url_for('auth.logout') }} ">
+                            <button>
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </button>
+                      </a>
+                </div>
+                    <p class="text-header"> Channels </p>
+
+
+                <ul class="nav nav-pills nav-stacked" id="channel-list">
+
+<!--                     {% for channel in channels %}
+                    <li>
+                        <a class="channel-selector" href="#channels/{{ channel }}">#{{ channel }}</a>
+                    </li>
+                    {% endfor %} -->
+
+                </ul>
+            <div id="channel-creation">
+                <input id="channel-name" class="form-control" type="text" value="" placeholder="Channel name" name="name">
+                    <button  class="btn btn-primary" type="submit" id="create-channel" name="submit">Create new</button>
+            </div>
+        </div>

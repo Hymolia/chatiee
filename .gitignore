@@ -1,0 +1,6 @@
+venv
+.idea
+.hg
+*pycache*
+*sublime*
+config.py

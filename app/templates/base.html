@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Chatie</title>
+    <link rel=stylesheet type=text/css
+          href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+    {% block extra_styles %} {% endblock extra_styles %}
+</head>
+<body>
+
+{% block body %}{% endblock %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-2.1.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.js') }}"></script>
+{% block extra_js %}
+{% endblock extra_js %}
+</body>
+</html>

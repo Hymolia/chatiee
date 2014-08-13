@@ -1,0 +1,11 @@
+# use glob syntax.
+syntax: glob
+
+__pychache__/**
+*.pyc
+venv/**
+.idea/**
+.git/**
+
+**sublime**
+config.py

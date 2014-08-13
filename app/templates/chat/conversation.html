@@ -1,0 +1,18 @@
+{% block messages %}
+
+<!--  -->
+<div class="col-md-10" id="conversation" >
+    <div id="messages">
+
+    </div>
+
+    <!--<form method="POST" class="form-inline" id="form-message" action="postmessage" accept-charset="UTF-8" role="form">-->
+       <!--{{ form.csrf_token }}-->
+    <div class="input-group" id="message-form">
+            <input id="message-input" class="form-control" type="text" placeholder="Your text" name="text" autofocus="">
+                  <span class="input-group-btn" id="input-button-wrapper">
+                        <button class="btn btn-default" id="message-post">Post it</button>
+                  </span>
+    </div>
+</div>
+{% endblock messages %}

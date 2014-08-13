@@ -1,0 +1,44 @@
+#sidebar {
+        background-color: #444;
+        height: 100%;
+        left: 250px;
+        margin-left: -250px;
+        position:fixed;
+        }
+.sidebar a {
+        text-decoration: none;
+        }
+div.wrapper {
+        padding-left: 250px;
+        }
+
+#message-form {
+        display: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        position: fixed;
+        bottom: 0;
+        }
+
+div#messages {
+        /*margin-top: 100px;*/
+        padding-bottom: 50px;
+        display: block;
+        }
+
+#sidebar .text-header  {
+        color: #fff;
+        }
+
+#sidebar .text-header button {
+        color: #444;
+        }
+
+#channel-creation {
+        margin-top: 10px;
+        }
+
+ul li {
+        dislay: inline;
+}
