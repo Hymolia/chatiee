@@ -1,12 +1,12 @@
 __author__ = 'cybran'
 
 # Import flask dependencies
-from flask import Blueprint, request, render_template, redirect, url_for, Response, g
+from flask import Blueprint, request, render_template, Response, g
 import json
 from app.modules.chat.models import Message, Channel
 from app.modules.chat.forms import New_channel
 from app.modules.auth.models import User
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from flask.views import MethodView
 from flask.ext.login import login_required, current_user
@@ -99,10 +99,9 @@ class ChannelAPI(ChatAPI):
 
         # /channels/<channel_name>
         else:
-            # fixme avoided backbone.js bug with passing unexpected field (channel), but it's a duct tape
-            json_model = request.get_json()
-            message = Message()
-            message.content = json_model['content']
+            message = Message(**request.get_json())
+            print(message)
+            # message.content = json_model['content']
             message.author = g.user.username
             current_channel = Channel.objects.get(name=channel_name)
             current_channel.messages.append(message)

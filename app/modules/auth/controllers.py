@@ -75,6 +75,7 @@ def signup():
 
 @mod_auth.route('/logout')
 def logout():
+    print("Logout")
     logout_user()
     response = make_response(redirect(url_for("intro.index")))
     response.set_cookie('username', expires=0)

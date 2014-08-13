@@ -1,7 +1,7 @@
 __author__ = 'cybran'
 
 # Import flask and template operators
-from flask import Flask, render_template, g, redirect, request
+from flask import Flask, render_template, g
 
 # Import MongoEngine and flask-login
 from flask.ext.mongoengine import MongoEngine

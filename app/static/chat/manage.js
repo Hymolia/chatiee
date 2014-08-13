@@ -17,9 +17,12 @@ var Message = Backbone.Model.extend({
     content: '',
     date_created: ''
   },  
-  initialize: function(channel){
-      this.url = 'channels/'+channel['channel']
-  }
+  // We don't need to saving date_created (it's DB value), so exclude this from save JSON request
+  blacklist: ['date_created',],
+  toJSON: function(options) {
+      return _.omit(this.attributes, this.blacklist);
+  },
+
 });
 
 // Use only fetch()
@@ -70,7 +73,7 @@ var MessageListView = Backbone.View.extend({
 
     postMessage: function(e){
       current_channel = arguments[0].currentTarget.getAttribute('channel');
-      var message = new Message({"channel": current_channel})
+      var message = new Message()
       message.set({
         content: $('#message-input', this.el).val()
       });
@@ -229,6 +232,7 @@ appendChannel: function(channel){
 
 var ChannelListView = new ChannelListView();
 
+var messageListView;
 var AppRouter = Backbone.Router.extend({
   routes: {
             "channels/:channel_name": "getConversation",
@@ -242,7 +246,7 @@ var AppRouter = Backbone.Router.extend({
         //document.getElementById('messages').innerHTML = "";
         document.getElementById("message-form").style.display = "table";
         document.getElementById("message-post").setAttribute('channel', channel_name);
-        var messageListView = new MessageListView({'channel_name': channel_name})
+        messageListView = new MessageListView({'channel_name': channel_name})
     });
 
 

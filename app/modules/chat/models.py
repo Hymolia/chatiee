@@ -4,7 +4,6 @@ __author__ = 'cybran'
 from app import db
 import datetime
 # Import module models (i.e. User) for using in subscribers field
-from app.modules.auth.models import User
 
 class Message(db.EmbeddedDocument):
 
